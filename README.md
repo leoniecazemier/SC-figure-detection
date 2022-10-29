@@ -1,4 +1,4 @@
-This repo will contain data and analysis for 'Involvement of superior colliculus in complex figure detection of mice'
+This repo will contain data and analysis for the paper titled 'Involvement of superior colliculus in complex figure detection of mice', authored by J. Leonie Cazemier, T. K. Loan Tran, Ann T. Y. Hsu, Medina Husić, Lisa Kirchberger, Matthew W. Self, Pieter R. Roelfsema, and J. Alexander Heimel.
 
 The preprint of this paper can be found at https://www.biorxiv.org/content/10.1101/2022.09.25.509365v1. 
 
