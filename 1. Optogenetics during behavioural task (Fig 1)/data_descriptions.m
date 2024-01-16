@@ -1,8 +1,8 @@
 %% Data descriptions
 
 % The struct 'behaviour' has a separate field containing data for each
-% mouse. For each mouse, properties of trials are concatenated across
-% sessions. There is also some summarized information. 
+% mouse (the mice were named after car models). For each mouse, properties 
+% of trials are concatenated across sessions. There is also some summarized information. 
 
 % The following properties are present: 
 
@@ -38,17 +38,18 @@
 % baseOptoH: For each latency, number of hits during optogenetic interference
 % baseOptoE: For each latency, number of errors during optogenetic interference
 % baseOptoP: For each latency, accuracy of task performance
-% baseOptoLats: optogenetic interference latencies for the baseOpto summarized statistics
-% basePperf: For each latency, p-value for test whether performance during optogenetic interference
+% baseOptoLats: optogenetic interference latencies for the baseOpto summarized statistics; 
+        % Last latency is a mock latency that summarizes trials without optogenetic interference
+% basePperf: For each latency, p-value for binomial test whether performance during optogenetic interference
         %  is lower than without optogenetic interference
-% basePchance: For each latency, p-value for test whether performance during optogenetic interference
+% basePchance: For each latency, p-value for binomial test whether performance during optogenetic interference
         %  is above chance level
  
 % ---- Orientation task -----
-% As base task, all variables named full...Ori
+% As in contrast task, all variables named full...Ori
 
 % ---- Phase task -----
-% As base task, all variables named full...OOP
+% As contrast task, all variables named full...OOP
       
 
 
