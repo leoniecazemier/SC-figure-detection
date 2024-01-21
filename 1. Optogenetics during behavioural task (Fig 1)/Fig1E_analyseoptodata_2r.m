@@ -408,14 +408,6 @@ for task = 1:3
     notnans = ~isnan(perfsTask);
     countnonans = sum(notnans,1);
     perfsTask = perfsTask(:,countnonans > 3);
-    
-    
-    %test for normality but don't act on it because friedmans test (nonparametric) in matlab  can only
-    %go two-way, not one-way
-    for lat = 1:size(perfsTask,2)
-        perfsLat = perfsTask(:,lat);
-        [Hn(lat) , Pn(lat)] = lillietest(perfsLat);
-    end    
 
     %for anova
      nmice = size(perfsTask,1);
