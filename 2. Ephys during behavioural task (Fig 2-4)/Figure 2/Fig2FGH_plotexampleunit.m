@@ -1,7 +1,7 @@
 %% plot example neuron
 
 u = 226;   %neuron of choice
-%load existing unit data
+%load existing unit firingrates_example
 % load('N:\Ephys\Analysis\behTanks\recInfo');
 % load('N:\Ephys\Analysis\Singleunits\unitdatareviewed.mat');
 load('C:\Users\leoni\Documents\NIN\Data\unitdatareviewed.mat')
@@ -58,7 +58,8 @@ BF = unit(u).bestFit;  %edit here!
 
 figure;
 hold on;
-FF = imagesc(gxi,gyi, squeeze(unit(u).MAPOUT(:,:,3)));
+rf_plot_data = squeeze(unit(u).MAPOUT(:,:,3));
+FF = imagesc(gxi,gyi, rf_plot_data);
 colormap(myC)
 
 RFx = unit(u).params(BF,1);
@@ -86,7 +87,7 @@ ax = gca;
 ax.TickDir = 'out';
 
 %orient(gcf,'landscape');
-%print('M:\Pictures data\FGpaper\Example226_RF.pdf','-dpdf');
+%print('M:\Pictures firingrates_example\FGpaper\Example226_RF.pdf','-dpdf');
 
 exRFinfo.RFxyw = [RFx RFy RFwidth];
 exRFinfo.FGxy = [figx figy; grx figy];
@@ -146,11 +147,11 @@ for grp = 1:length(grps)
 end
 
  
-%print('M:\Pictures data\FGpaper\Example226_Scatter.pdf','-dpdf');
+%print('M:\Pictures firingrates_example\FGpaper\Example226_Scatter.pdf','-dpdf');
 
 %% Plot Ori and OOP fg modulation
 
-clear data
+clear firingrates_example
 rftype = 1;
 trHelp = [0 2 4];
 
@@ -161,10 +162,10 @@ for Stim = 1:3
     hold on;
     for ttype = 1:2
         tSelect = find(ismember(unit(u).trialGroups, trtypes(ttype+trHelp(Stim),:)));
-        data{Stim} = unit(u).convDataVis(tSelect,:);
-        smdatab = smooth(nanmean(data{Stim},1),20);
+        firingrates_example{Stim,ttype} = unit(u).convDataVis(tSelect,:);
+        smdatab = smooth(nanmean(firingrates_example{Stim,ttype},1),20);
         col = colors{ttype+trHelp(Stim)};
-        semb = smooth(nansem_large(data{Stim},1),20);
+        semb = smooth(nansem_large(firingrates_example{Stim,ttype},1),20);
         [handleFill(ttype),handleLine(ttype)] = errorfill(px,smdatab,semb,col);
         xlim([-0.05 0.25])
         ylim([0 125]);
