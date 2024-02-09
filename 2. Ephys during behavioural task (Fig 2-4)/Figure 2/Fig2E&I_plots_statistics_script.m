@@ -329,6 +329,7 @@ end
 
 fittedOnset = NaN(1,3);
 figure(37);
+clf;
 rf=1;
 clear fittedLat coeff
 
@@ -338,31 +339,31 @@ for task=1:3
     notCent = allRFs(whichCellSel) ~= 1;
     tempData(:,notCent,:) = [];
     
-    FGM_tosm = squeeze(gsubtract(tempData(1,:,:),tempData(2,:,:)));
-    FGM_mean = smooth(nanmean(FGM_tosm,1),smfvis);
-    FGM_sem = smooth(nansem_large(FGM_tosm,1),smfvis);
+    FGM_tosm{task} = squeeze(gsubtract(tempData(1,:,:),tempData(2,:,:)));
+    FGM_mean{task} = smooth(nanmean(FGM_tosm{task},1),smfvis);
+    FGM_sem{task} = smooth(nansem_large(FGM_tosm{task},1),smfvis);
     
     %pixels for fitting script
     fitTimes = find(px>-0.05 & px<0.25);
     pxT = round((px(fitTimes)'+0.0005)*1000);
-    [fittedLat(task),coeff(task,:)] = latencyfit_jasper_leonie(FGM_mean(fitTimes),pxT,0);
+    [fittedLat(task),coeff(task,:)] = latencyfit_final(FGM_mean{task}(fitTimes),pxT,0);
     a = coeff(task,1); %how fast it goes to new baseline > = faster
     c = coeff(task,2); %amplitude > = higher
     d = coeff(task,3); %peak angle > = sharper
     m = coeff(task,4);  %peak time > = later
     s = coeff(task,5); %peak angle > = sharper
-    y = d * exp(m*a+0.5*s^2*a^2-a.*pxT).*normcdf(pxT,m+s^2*a,s)+c.*normcdf(pxT,m,s);
-    [mf,mfix] = max(y);
+    fitted_FGM{task} = d * exp(m*a+0.5*s^2*a^2-a.*pxT).*normcdf(pxT,m+s^2*a,s)+c.*normcdf(pxT,m,s);
+    [mf,mfix] = max(fitted_FGM{task});
     ixs = [1:mfix]; % only search before max peak
-    [yL,xL]=min(abs(y(ixs)-mf*0.33));
+    [yL,xL]=min(abs(fitted_FGM{task}(ixs)-mf*0.33));
     
     subplot(1,3, plotIdxHelp(task))
     cla
     pxTimes = px(fitTimes);
     colFit = colorsFG{2*task -1};
-    [modulsF, modulsL] = errorfill(pxTimes,FGM_mean(fitTimes), FGM_sem(fitTimes),colFit);
+    [modulsF, modulsL] = errorfill(pxTimes,FGM_mean{task}(fitTimes), FGM_sem{task}(fitTimes),colFit);
     hold on;
-    plot(pxTimes,y,'k','linewidth',1.7);
+    plot(pxTimes,fitted_FGM{task},'k','linewidth',1.7);
     title(taskNames{task})
     axis tight
     switch task
@@ -374,7 +375,7 @@ for task=1:3
     ylims = get(gca,'ylim');
     ylim(ylims);
     myYdiv = (ylims(2)-ylims(1))/30;
-    fitAR = arrow([pxTimes(xL) y(xL)], [pxTimes(xL) ylims(1) - myYdiv*2 ]); % Fitted inflection point
+    fitAR = arrow([pxTimes(xL) fitted_FGM{task}(xL)], [pxTimes(xL) ylims(1) - myYdiv*2 ]); % Fitted inflection point
     arrow(fitAR,'EdgeColor','k','FaceColor','k');
     ylim([ylims(1)-myYdiv*2 ylims(2)]);
     text(pxTimes(xL)+0.02, ylims(1),[num2str(round(pxT(xL))) ' ms'],'color', colFit);
@@ -674,15 +675,15 @@ dpsmeanbar = nanmean(fullDataD,1);
 dpsmeanbar = dpsmeanbar([1 2; 3 4]);
 dpssembar = nansem_large(fullDataD,1);
 dpssembar = dpssembar([1 2; 3 4]);
-dpssembarfl = dpssembar';
-dpsmeanbarfl = dpsmeanbar';
+dpssembar_flipped = dpssembar';
+dpsmeanbar_flipped = dpsmeanbar';
 b = bar(1:2,dpsmeanbar,'grouped');
-nBars = size(dpsmeanbarfl,1);
-nGroups = size(dpsmeanbarfl,2);
+nBars = size(dpsmeanbar_flipped,1);
+nGroups = size(dpsmeanbar_flipped,2);
 groupWidth = min(0.8, nBars/(nBars + 1.5));
 for i = 1:nBars
     x = (1:nGroups) - groupWidth/2 + (2*i-1) * groupWidth / (2*nBars);
-    errorbar(x, dpsmeanbarfl(i,:),dpssembarfl(i,:), '.k');
+    errorbar(x, dpsmeanbar_flipped(i,:),dpssembar_flipped(i,:), '.k');
 end
 xticks(1:2)
 xticklabels(taskNames(1:2))

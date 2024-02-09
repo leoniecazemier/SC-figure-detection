@@ -1,0 +1,1 @@
+The plots in supplement 1C and 1D are made using the same script as figure 2I. To get the data of the putative multisensory cells, select 'Servo' cells in the pop-up window. 
