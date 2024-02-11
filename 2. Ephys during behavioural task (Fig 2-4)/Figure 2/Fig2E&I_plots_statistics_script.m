@@ -218,12 +218,7 @@ for rf = rfSel
         %markup
         xlim([-0.05 0.25])
         title([taskNames{task} ' FGM: rf ' rfNames{rf} ', n=' num2str(n)]);
-%         switch task
-%             case {1 2}
-%                 ylim([-0.6 1.8]);
-%             case {3}
-%                 ylim([-0.9 2.7]);
-%         end
+
         yLimits = get(gca, 'ylim');
         legend(handleLine,fgNames);
         xlabel('Time from stim onset (s)');
